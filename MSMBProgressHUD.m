@@ -444,7 +444,7 @@ static const CGFloat MSMBDefaultDetailsLabelFontSize = 12.f;
         appearance = [UIActivityIndicatorView appearanceWhenContainedIn:[MSMBProgressHUD class], nil];
 #else
         // For iOS 9+
-        appearance = [UIActivityIndicatorView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]];
+        appearance = [UIActivityIndicatorView appearanceWhenContainedInInstancesOfClasses:@[[MSMBProgressHUD class]]];
 #endif
 
         if (appearance.color == nil) {
@@ -455,7 +455,7 @@ static const CGFloat MSMBDefaultDetailsLabelFontSize = 12.f;
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < 90000
         appearance = [MSMBRoundProgressView appearanceWhenContainedIn:[MSMBProgressHUD class], nil];
 #else
-        appearance = [MBRoundProgressView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]];
+        appearance = [MSMBRoundProgressView appearanceWhenContainedInInstancesOfClasses:@[[MSMBProgressHUD class]]];
 #endif
         if (appearance.progressTintColor == nil) {
             ((MSMBRoundProgressView *)indicator).progressTintColor = color;
@@ -468,7 +468,7 @@ static const CGFloat MSMBDefaultDetailsLabelFontSize = 12.f;
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < 90000
         appearance = [MSMBBarProgressView appearanceWhenContainedIn:[MSMBProgressHUD class], nil];
 #else
-        appearance = [MBBarProgressView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]];
+        appearance = [MSMBBarProgressView appearanceWhenContainedInInstancesOfClasses:@[[MSMBProgressHUD class]]];
 #endif
         if (appearance.progressColor == nil) {
             ((MSMBBarProgressView *)indicator).progressColor = color;
