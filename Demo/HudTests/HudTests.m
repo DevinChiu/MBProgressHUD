@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "MBProgressHUD.h"
+#import "MSMBProgressHUD.h"
 
 
 #define weakify(var) __weak typeof(var) weak_##var = var;
@@ -38,7 +38,7 @@ MBTestHUDIsHiden(hud, rootView); \
 XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
 } while (0)
 
-@interface HudTests : XCTestCase <MBProgressHUDDelegate>
+@interface HudTests : XCTestCase <MSMBProgressHUDDelegate>
 
 @property (nonatomic) XCTestExpectation *hideExpectation;
 @property (nonatomic, copy) dispatch_block_t hideChecks;
@@ -51,10 +51,10 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
 #pragma mark - Initialization
 
 - (void)testInitializers {
-    XCTAssertNotNil([[MBProgressHUD alloc] initWithView:[UIView new]]);
+    XCTAssertNotNil([[MSMBProgressHUD alloc] initWithView:[UIView new]]);
     UIView *nilView = nil;
-    XCTAssertThrows([[MBProgressHUD alloc] initWithView:nilView]);
-    XCTAssertNotNil([[MBProgressHUD alloc] initWithFrame:CGRectZero]);
+    XCTAssertThrows([[MSMBProgressHUD alloc] initWithView:nilView]);
+    XCTAssertNotNil([[MSMBProgressHUD alloc] initWithFrame:CGRectZero]);
     NSKeyedUnarchiver *dummyUnarchiver;
 #if !TARGET_OS_MACCATALYST
     if (@available(iOS 11.0, *)) {
@@ -65,7 +65,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
         dummyUnarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:[NSData data]];
     }
 #endif
-    XCTAssertNotNil([[MBProgressHUD alloc] initWithCoder:dummyUnarchiver]);
+    XCTAssertNotNil([[MSMBProgressHUD alloc] initWithCoder:dummyUnarchiver]);
 }
 
 #pragma mark - Convenience
@@ -74,7 +74,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
     UIViewController *rootViewController = UIApplication.sharedApplication.windows.firstObject.rootViewController;
     UIView *rootView = rootViewController.view;
 
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:rootView animated:NO];
+    MSMBProgressHUD *hud = [MSMBProgressHUD showHUDAddedTo:rootView animated:NO];
 
     XCTAssertNotNil(hud, @"A HUD should be created.");
     MBTestHUDIsVisible(hud, rootView);
@@ -82,13 +82,13 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
     XCTAssertEqual(hud.bezelView.alpha, 1.f, @"The HUD should be visible.");
     XCTAssertFalse([hud.bezelView.layer.animationKeys containsObject:@"opacity"], @"The opacity should NOT be animated.");
 
-    XCTAssertEqualObjects([MBProgressHUD HUDForView:rootView], hud, @"The HUD should be found via the convenience operation.");
+    XCTAssertEqualObjects([MSMBProgressHUD HUDForView:rootView], hud, @"The HUD should be found via the convenience operation.");
 
-    XCTAssertTrue([MBProgressHUD hideHUDForView:rootView animated:NO], @"The HUD should be found and removed.");
+    XCTAssertTrue([MSMBProgressHUD hideHUDForView:rootView animated:NO], @"The HUD should be found and removed.");
 
     MBTestHUDIsHidenAndRemoved(hud, rootView);
 
-    XCTAssertFalse([MBProgressHUD hideHUDForView:rootView animated:NO], @"A subsequent HUD hide operation should fail.");
+    XCTAssertFalse([MSMBProgressHUD hideHUDForView:rootView animated:NO], @"A subsequent HUD hide operation should fail.");
 }
 
 - (void)testAnimatedConvenienceHUDPresentation {
@@ -97,7 +97,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
 
     self.hideExpectation = [self expectationWithDescription:@"The hudWasHidden: delegate should have been called."];
 
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:rootView animated:YES];
+    MSMBProgressHUD *hud = [MSMBProgressHUD showHUDAddedTo:rootView animated:YES];
     hud.delegate = self;
 
     XCTAssertNotNil(hud, @"A HUD should be created.");
@@ -106,9 +106,9 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
     XCTAssertEqual(hud.bezelView.alpha, 1.f, @"The HUD should be visible.");
     XCTAssertTrue([hud.bezelView.layer.animationKeys containsObject:@"opacity"], @"The opacity should be animated.");
 
-    XCTAssertEqualObjects([MBProgressHUD HUDForView:rootView], hud, @"The HUD should be found via the convenience operation.");
+    XCTAssertEqualObjects([MSMBProgressHUD HUDForView:rootView], hud, @"The HUD should be found via the convenience operation.");
 
-    XCTAssertTrue([MBProgressHUD hideHUDForView:rootView animated:YES], @"The HUD should be found and removed.");
+    XCTAssertTrue([MSMBProgressHUD hideHUDForView:rootView animated:YES], @"The HUD should be found and removed.");
 
     XCTAssertTrue([rootView.subviews containsObject:hud], @"The HUD should still be part of the view hierarchy.");
     XCTAssertEqual(hud.alpha, 1.f, @"The hud should still be visible.");
@@ -121,7 +121,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
         strongify(self);
         MBTestHUDIsHidenAndRemoved(hud, rootView);
 
-        XCTAssertFalse([MBProgressHUD hideHUDForView:rootView animated:YES], @"A subsequent HUD hide operation should fail.");
+        XCTAssertFalse([MSMBProgressHUD hideHUDForView:rootView animated:YES], @"A subsequent HUD hide operation should fail.");
     };
 
     [self waitForExpectationsWithTimeout:5. handler:nil];
@@ -134,7 +134,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
     self.hideExpectation = [self expectationWithDescription:@"The hudWasHidden: delegate should have been called."];
     XCTestExpectation *completionExpectation = [self expectationWithDescription:@"The completionBlock: should have been called."];
 
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:rootView animated:YES];
+    MSMBProgressHUD *hud = [MSMBProgressHUD showHUDAddedTo:rootView animated:YES];
     hud.delegate = self;
     hud.completionBlock = ^{
         [completionExpectation fulfill];
@@ -151,15 +151,15 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
     UIViewController *rootViewController = UIApplication.sharedApplication.windows.firstObject.rootViewController;
     UIView *rootView = rootViewController.view;
 
-    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:rootView];
-    hud.mode = MBProgressHUDModeDeterminate;
+    MSMBProgressHUD *hud = [[MSMBProgressHUD alloc] initWithView:rootView];
+    hud.mode = MSMBProgressHUDModeDeterminate;
     [rootView addSubview:hud];
     [hud showAnimated:NO];
 
     MBTestHUDIsVisible(hud, rootView);
-    XCTAssertNotNil([self view:hud firstSubviewOfClass:[MBRoundProgressView class]]);
+    XCTAssertNotNil([self view:hud firstSubviewOfClass:[MSMBRoundProgressView class]]);
 
-    XCTAssertTrue([MBProgressHUD hideHUDForView:rootView animated:NO], @"The HUD should be found and removed.");
+    XCTAssertTrue([MSMBProgressHUD hideHUDForView:rootView animated:NO], @"The HUD should be found and removed.");
     MBTestHUDIsHidenAndRemoved(hud, rootView);
 }
 
@@ -167,15 +167,15 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
     UIViewController *rootViewController = UIApplication.sharedApplication.windows.firstObject.rootViewController;
     UIView *rootView = rootViewController.view;
 
-    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:rootView];
-    hud.mode = MBProgressHUDModeAnnularDeterminate;
+    MSMBProgressHUD *hud = [[MSMBProgressHUD alloc] initWithView:rootView];
+    hud.mode = MSMBProgressHUDModeAnnularDeterminate;
     [rootView addSubview:hud];
     [hud showAnimated:NO];
 
     MBTestHUDIsVisible(hud, rootView);
-    XCTAssertNotNil([self view:hud firstSubviewOfClass:[MBRoundProgressView class]]);
+    XCTAssertNotNil([self view:hud firstSubviewOfClass:[MSMBRoundProgressView class]]);
 
-    XCTAssertTrue([MBProgressHUD hideHUDForView:rootView animated:NO], @"The HUD should be found and removed.");
+    XCTAssertTrue([MSMBProgressHUD hideHUDForView:rootView animated:NO], @"The HUD should be found and removed.");
     MBTestHUDIsHidenAndRemoved(hud, rootView);
 }
 
@@ -183,15 +183,15 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
     UIViewController *rootViewController = UIApplication.sharedApplication.windows.firstObject.rootViewController;
     UIView *rootView = rootViewController.view;
 
-    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:rootView];
-    hud.mode = MBProgressHUDModeDeterminateHorizontalBar;
+    MSMBProgressHUD *hud = [[MSMBProgressHUD alloc] initWithView:rootView];
+    hud.mode = MSMBProgressHUDModeDeterminateHorizontalBar;
     [rootView addSubview:hud];
     [hud showAnimated:NO];
 
     MBTestHUDIsVisible(hud, rootView);
-    XCTAssertNotNil([self view:hud firstSubviewOfClass:[MBBarProgressView class]]);
+    XCTAssertNotNil([self view:hud firstSubviewOfClass:[MSMBBarProgressView class]]);
 
-    XCTAssertTrue([MBProgressHUD hideHUDForView:rootView animated:NO], @"The HUD should be found and removed.");
+    XCTAssertTrue([MSMBProgressHUD hideHUDForView:rootView animated:NO], @"The HUD should be found and removed.");
     MBTestHUDIsHidenAndRemoved(hud, rootView);
 
 }
@@ -202,7 +202,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
     UIViewController *rootViewController = UIApplication.sharedApplication.windows.firstObject.rootViewController;
     UIView *rootView = rootViewController.view;
 
-    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:rootView];
+    MSMBProgressHUD *hud = [[MSMBProgressHUD alloc] initWithView:rootView];
 
     [hud.bezelView.subviews enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
         XCTAssert(![view isKindOfClass:UIVisualEffectView.class] || idx == 0, @"Just the first subview should be a visual effect view.");
@@ -223,7 +223,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
 
     self.hideExpectation = [self expectationWithDescription:@"The hudWasHidden: delegate should have been called."];
 
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:rootView animated:NO];
+    MSMBProgressHUD *hud = [MSMBProgressHUD showHUDAddedTo:rootView animated:NO];
     hud.delegate = self;
 
     XCTAssertNotNil(hud, @"A HUD should be created.");
@@ -253,7 +253,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
     UIViewController *rootViewController = UIApplication.sharedApplication.windows.firstObject.rootViewController;
     UIView *rootView = rootViewController.view;
 
-    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:rootView];
+    MSMBProgressHUD *hud = [[MSMBProgressHUD alloc] initWithView:rootView];
     [rootView addSubview:hud];
 
     [hud showAnimated:YES];
@@ -282,7 +282,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
     UIViewController *rootViewController = UIApplication.sharedApplication.windows.firstObject.rootViewController;
     UIView *rootView = rootViewController.view;
 
-    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:rootView];
+    MSMBProgressHUD *hud = [[MSMBProgressHUD alloc] initWithView:rootView];
     [rootView addSubview:hud];
     [hud showAnimated:NO];
 
@@ -301,7 +301,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
   UIViewController *rootViewController = UIApplication.sharedApplication.windows.firstObject.rootViewController;
   UIView *rootView = rootViewController.view;
 
-  MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:rootView animated:NO];
+  MSMBProgressHUD *hud = [MSMBProgressHUD showHUDAddedTo:rootView animated:NO];
 
   [hud hideAnimated:YES];
 
@@ -328,7 +328,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
 
     XCTestExpectation *hideExpectation = [self expectationWithDescription:@"The hud should have been hidden."];
 
-    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:rootView];
+    MSMBProgressHUD *hud = [[MSMBProgressHUD alloc] initWithView:rootView];
     [rootView addSubview:hud];
     [hud showAnimated:YES];
 
@@ -357,7 +357,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
 
     self.hideExpectation = [self expectationWithDescription:@"The hudWasHidden: delegate should have been called."];
 
-    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:rootView];
+    MSMBProgressHUD *hud = [[MSMBProgressHUD alloc] initWithView:rootView];
     hud.delegate = self;
     hud.removeFromSuperViewOnHide = YES;
     hud.minShowTime = 2.;
@@ -394,7 +394,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
 
     self.hideExpectation = [self expectationWithDescription:@"The hudWasHidden: delegate should have been called."];
 
-    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:rootView];
+    MSMBProgressHUD *hud = [[MSMBProgressHUD alloc] initWithView:rootView];
     hud.delegate = self;
     hud.removeFromSuperViewOnHide = YES;
     hud.graceTime = 2.;
@@ -435,7 +435,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
 
     self.hideExpectation = [self expectationWithDescription:@"The hudWasHidden: delegate should have been called."];
 
-    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:rootView];
+    MSMBProgressHUD *hud = [[MSMBProgressHUD alloc] initWithView:rootView];
     hud.delegate = self;
     hud.removeFromSuperViewOnHide = YES;
     hud.graceTime = 2.;
@@ -477,7 +477,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
     UIViewController *rootViewController = UIApplication.sharedApplication.windows.firstObject.rootViewController;
     UIView *rootView = rootViewController.view;
 
-    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:rootView];
+    MSMBProgressHUD *hud = [[MSMBProgressHUD alloc] initWithView:rootView];
     hud.removeFromSuperViewOnHide = YES;
     hud.offset = CGPointMake(50, 50);
     hud.square = YES;
@@ -498,7 +498,7 @@ XCTAssertNil(hud.superview, @"The HUD should not have a superview."); \
 
 #pragma mark - MBProgressHUDDelegate
 
-- (void)hudWasHidden:(MBProgressHUD *)hud {
+- (void)hudWasHidden:(MSMBProgressHUD *)hud {
     if (self.hideChecks) self.hideChecks();
     self.hideChecks = nil;
 

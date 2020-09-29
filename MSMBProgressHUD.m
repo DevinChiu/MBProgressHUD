@@ -1,22 +1,22 @@
 //
-// MBProgressHUD.m
+// MSMBProgressHUD.m
 // Version 1.2.0
 // Created by Matej Bukovinski on 2.4.09.
 //
 
-#import "MBProgressHUD.h"
+#import "MSMBProgressHUD.h"
 #import <tgmath.h>
 
 #define MBMainThreadAssert() NSAssert([NSThread isMainThread], @"MBProgressHUD needs to be accessed on the main thread.");
 
-CGFloat const MBProgressMaxOffset = 1000000.f;
+CGFloat const MSMBProgressMaxOffset = 1000000.f;
 
-static const CGFloat MBDefaultPadding = 4.f;
-static const CGFloat MBDefaultLabelFontSize = 16.f;
-static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
+static const CGFloat MSMBDefaultPadding = 4.f;
+static const CGFloat MSMBDefaultLabelFontSize = 16.f;
+static const CGFloat MSMBDefaultDetailsLabelFontSize = 12.f;
 
 
-@interface MBProgressHUD ()
+@interface MSMBProgressHUD ()
 
 @property (nonatomic, assign) BOOL useAnimation;
 @property (nonatomic, assign, getter=hasFinished) BOOL finished;
@@ -35,16 +35,16 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 @end
 
 
-@interface MBProgressHUDRoundedButton : UIButton
+@interface MSMBProgressHUDRoundedButton : UIButton
 @end
 
 
-@implementation MBProgressHUD
+@implementation MSMBProgressHUD
 
 #pragma mark - Class methods
 
 + (instancetype)showHUDAddedTo:(UIView *)view animated:(BOOL)animated {
-    MBProgressHUD *hud = [[self alloc] initWithView:view];
+    MSMBProgressHUD *hud = [[self alloc] initWithView:view];
     hud.removeFromSuperViewOnHide = YES;
     [view addSubview:hud];
     [hud showAnimated:animated];
@@ -52,7 +52,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 }
 
 + (BOOL)hideHUDForView:(UIView *)view animated:(BOOL)animated {
-    MBProgressHUD *hud = [self HUDForView:view];
+    MSMBProgressHUD *hud = [self HUDForView:view];
     if (hud != nil) {
         hud.removeFromSuperViewOnHide = YES;
         [hud hideAnimated:animated];
@@ -61,11 +61,11 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
     return NO;
 }
 
-+ (MBProgressHUD *)HUDForView:(UIView *)view {
++ (MSMBProgressHUD *)HUDForView:(UIView *)view {
     NSEnumerator *subviewsEnum = [view.subviews reverseObjectEnumerator];
     for (UIView *subview in subviewsEnum) {
         if ([subview isKindOfClass:self]) {
-            MBProgressHUD *hud = (MBProgressHUD *)subview;
+            MSMBProgressHUD *hud = (MSMBProgressHUD *)subview;
             if (hud.hasFinished == NO) {
                 return hud;
             }
@@ -78,8 +78,8 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 
 - (void)commonInit {
     // Set default values for properties
-    _animationType = MBProgressHUDAnimationFade;
-    _mode = MBProgressHUDModeIndeterminate;
+    _animationType = MSMBProgressHUDAnimationFade;
+    _mode = MSMBProgressHUDModeIndeterminate;
     _margin = 20.0f;
     _defaultMotionEffectsEnabled = NO;
 
@@ -244,10 +244,10 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
     }
 }
 
-- (void)animateIn:(BOOL)animatingIn withType:(MBProgressHUDAnimation)type completion:(void(^)(BOOL finished))completion {
+- (void)animateIn:(BOOL)animatingIn withType:(MSMBProgressHUDAnimation)type completion:(void(^)(BOOL finished))completion {
     // Automatically determine the correct zoom animation type
-    if (type == MBProgressHUDAnimationZoom) {
-        type = animatingIn ? MBProgressHUDAnimationZoomIn : MBProgressHUDAnimationZoomOut;
+    if (type == MSMBProgressHUDAnimationZoom) {
+        type = animatingIn ? MSMBProgressHUDAnimationZoomIn : MSMBProgressHUDAnimationZoomOut;
     }
 
     CGAffineTransform small = CGAffineTransformMakeScale(0.5f, 0.5f);
@@ -255,9 +255,9 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 
     // Set starting state
     UIView *bezelView = self.bezelView;
-    if (animatingIn && bezelView.alpha == 0.f && type == MBProgressHUDAnimationZoomIn) {
+    if (animatingIn && bezelView.alpha == 0.f && type == MSMBProgressHUDAnimationZoomIn) {
         bezelView.transform = small;
-    } else if (animatingIn && bezelView.alpha == 0.f && type == MBProgressHUDAnimationZoomOut) {
+    } else if (animatingIn && bezelView.alpha == 0.f && type == MSMBProgressHUDAnimationZoomOut) {
         bezelView.transform = large;
     }
 
@@ -265,9 +265,9 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
     dispatch_block_t animations = ^{
         if (animatingIn) {
             bezelView.transform = CGAffineTransformIdentity;
-        } else if (!animatingIn && type == MBProgressHUDAnimationZoomIn) {
+        } else if (!animatingIn && type == MSMBProgressHUDAnimationZoomIn) {
             bezelView.transform = large;
-        } else if (!animatingIn && type == MBProgressHUDAnimationZoomOut) {
+        } else if (!animatingIn && type == MSMBProgressHUDAnimationZoomOut) {
             bezelView.transform = small;
         }
         CGFloat alpha = animatingIn ? 1.f : 0.f;
@@ -286,11 +286,11 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
             [self removeFromSuperview];
         }
     }
-    MBProgressHUDCompletionBlock completionBlock = self.completionBlock;
+    MSMBProgressHUDCompletionBlock completionBlock = self.completionBlock;
     if (completionBlock) {
         completionBlock();
     }
-    id<MBProgressHUDDelegate> delegate = self.delegate;
+    id<MSMBProgressHUDDelegate> delegate = self.delegate;
     if ([delegate respondsToSelector:@selector(hudWasHidden:)]) {
         [delegate performSelector:@selector(hudWasHidden:) withObject:self];
     }
@@ -301,15 +301,15 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 - (void)setupViews {
     UIColor *defaultColor = self.contentColor;
 
-    MBBackgroundView *backgroundView = [[MBBackgroundView alloc] initWithFrame:self.bounds];
-    backgroundView.style = MBProgressHUDBackgroundStyleSolidColor;
+    MSMBBackgroundView *backgroundView = [[MSMBBackgroundView alloc] initWithFrame:self.bounds];
+    backgroundView.style = MSMBProgressHUDBackgroundStyleSolidColor;
     backgroundView.backgroundColor = [UIColor clearColor];
     backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     backgroundView.alpha = 0.f;
     [self addSubview:backgroundView];
     _backgroundView = backgroundView;
 
-    MBBackgroundView *bezelView = [MBBackgroundView new];
+    MSMBBackgroundView *bezelView = [MSMBBackgroundView new];
     bezelView.translatesAutoresizingMaskIntoConstraints = NO;
     bezelView.layer.cornerRadius = 5.f;
     bezelView.alpha = 0.f;
@@ -320,7 +320,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
     label.adjustsFontSizeToFitWidth = NO;
     label.textAlignment = NSTextAlignmentCenter;
     label.textColor = defaultColor;
-    label.font = [UIFont boldSystemFontOfSize:MBDefaultLabelFontSize];
+    label.font = [UIFont boldSystemFontOfSize:MSMBDefaultLabelFontSize];
     label.opaque = NO;
     label.backgroundColor = [UIColor clearColor];
     _label = label;
@@ -330,14 +330,14 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
     detailsLabel.textAlignment = NSTextAlignmentCenter;
     detailsLabel.textColor = defaultColor;
     detailsLabel.numberOfLines = 0;
-    detailsLabel.font = [UIFont boldSystemFontOfSize:MBDefaultDetailsLabelFontSize];
+    detailsLabel.font = [UIFont boldSystemFontOfSize:MSMBDefaultDetailsLabelFontSize];
     detailsLabel.opaque = NO;
     detailsLabel.backgroundColor = [UIColor clearColor];
     _detailsLabel = detailsLabel;
 
-    UIButton *button = [MBProgressHUDRoundedButton buttonWithType:UIButtonTypeCustom];
+    UIButton *button = [MSMBProgressHUDRoundedButton buttonWithType:UIButtonTypeCustom];
     button.titleLabel.textAlignment = NSTextAlignmentCenter;
-    button.titleLabel.font = [UIFont boldSystemFontOfSize:MBDefaultDetailsLabelFontSize];
+    button.titleLabel.font = [UIFont boldSystemFontOfSize:MSMBDefaultDetailsLabelFontSize];
     [button setTitleColor:defaultColor forState:UIControlStateNormal];
     _button = button;
 
@@ -364,10 +364,10 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 - (void)updateIndicators {
     UIView *indicator = self.indicator;
     BOOL isActivityIndicator = [indicator isKindOfClass:[UIActivityIndicatorView class]];
-    BOOL isRoundIndicator = [indicator isKindOfClass:[MBRoundProgressView class]];
+    BOOL isRoundIndicator = [indicator isKindOfClass:[MSMBRoundProgressView class]];
 
-    MBProgressHUDMode mode = self.mode;
-    if (mode == MBProgressHUDModeIndeterminate) {
+    MSMBProgressHUDMode mode = self.mode;
+    if (mode == MSMBProgressHUDModeIndeterminate) {
         if (!isActivityIndicator) {
             // Update to indeterminate indicator
             UIActivityIndicatorView *activityIndicator;
@@ -387,30 +387,30 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
             [self.bezelView addSubview:indicator];
         }
     }
-    else if (mode == MBProgressHUDModeDeterminateHorizontalBar) {
+    else if (mode == MSMBProgressHUDModeDeterminateHorizontalBar) {
         // Update to bar determinate indicator
         [indicator removeFromSuperview];
-        indicator = [[MBBarProgressView alloc] init];
+        indicator = [[MSMBBarProgressView alloc] init];
         [self.bezelView addSubview:indicator];
     }
-    else if (mode == MBProgressHUDModeDeterminate || mode == MBProgressHUDModeAnnularDeterminate) {
+    else if (mode == MSMBProgressHUDModeDeterminate || mode == MSMBProgressHUDModeAnnularDeterminate) {
         if (!isRoundIndicator) {
             // Update to determinante indicator
             [indicator removeFromSuperview];
-            indicator = [[MBRoundProgressView alloc] init];
+            indicator = [[MSMBRoundProgressView alloc] init];
             [self.bezelView addSubview:indicator];
         }
-        if (mode == MBProgressHUDModeAnnularDeterminate) {
-            [(MBRoundProgressView *)indicator setAnnular:YES];
+        if (mode == MSMBProgressHUDModeAnnularDeterminate) {
+            [(MSMBRoundProgressView *)indicator setAnnular:YES];
         }
     }
-    else if (mode == MBProgressHUDModeCustomView && self.customView != indicator) {
+    else if (mode == MSMBProgressHUDModeCustomView && self.customView != indicator) {
         // Update custom view indicator
         [indicator removeFromSuperview];
         indicator = self.customView;
         [self.bezelView addSubview:indicator];
     }
-    else if (mode == MBProgressHUDModeText) {
+    else if (mode == MSMBProgressHUDModeText) {
         [indicator removeFromSuperview];
         indicator = nil;
     }
@@ -441,7 +441,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
     if ([indicator isKindOfClass:[UIActivityIndicatorView class]]) {
         UIActivityIndicatorView *appearance = nil;
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < 90000
-        appearance = [UIActivityIndicatorView appearanceWhenContainedIn:[MBProgressHUD class], nil];
+        appearance = [UIActivityIndicatorView appearanceWhenContainedIn:[MSMBProgressHUD class], nil];
 #else
         // For iOS 9+
         appearance = [UIActivityIndicatorView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]];
@@ -450,31 +450,31 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
         if (appearance.color == nil) {
             ((UIActivityIndicatorView *)indicator).color = color;
         }
-    } else if ([indicator isKindOfClass:[MBRoundProgressView class]]) {
-        MBRoundProgressView *appearance = nil;
+    } else if ([indicator isKindOfClass:[MSMBRoundProgressView class]]) {
+        MSMBRoundProgressView *appearance = nil;
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < 90000
-        appearance = [MBRoundProgressView appearanceWhenContainedIn:[MBProgressHUD class], nil];
+        appearance = [MSMBRoundProgressView appearanceWhenContainedIn:[MSMBProgressHUD class], nil];
 #else
         appearance = [MBRoundProgressView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]];
 #endif
         if (appearance.progressTintColor == nil) {
-            ((MBRoundProgressView *)indicator).progressTintColor = color;
+            ((MSMBRoundProgressView *)indicator).progressTintColor = color;
         }
         if (appearance.backgroundTintColor == nil) {
-            ((MBRoundProgressView *)indicator).backgroundTintColor = [color colorWithAlphaComponent:0.1];
+            ((MSMBRoundProgressView *)indicator).backgroundTintColor = [color colorWithAlphaComponent:0.1];
         }
-    } else if ([indicator isKindOfClass:[MBBarProgressView class]]) {
-        MBBarProgressView *appearance = nil;
+    } else if ([indicator isKindOfClass:[MSMBBarProgressView class]]) {
+        MSMBBarProgressView *appearance = nil;
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < 90000
-        appearance = [MBBarProgressView appearanceWhenContainedIn:[MBProgressHUD class], nil];
+        appearance = [MSMBBarProgressView appearanceWhenContainedIn:[MSMBProgressHUD class], nil];
 #else
         appearance = [MBBarProgressView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]];
 #endif
         if (appearance.progressColor == nil) {
-            ((MBBarProgressView *)indicator).progressColor = color;
+            ((MSMBBarProgressView *)indicator).progressColor = color;
         }
         if (appearance.lineColor == nil) {
-            ((MBBarProgressView *)indicator).lineColor = color;
+            ((MSMBBarProgressView *)indicator).lineColor = color;
         }
     } else {
         [indicator setTintColor:color];
@@ -482,7 +482,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 }
 
 - (void)updateBezelMotionEffects {
-    MBBackgroundView *bezelView = self.bezelView;
+    MSMBBackgroundView *bezelView = self.bezelView;
     UIMotionEffectGroup *bezelMotionEffects = self.bezelMotionEffects;
 
     if (self.defaultMotionEffectsEnabled && !bezelMotionEffects) {
@@ -619,7 +619,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
         BOOL secondVisible = !secondView.hidden && !CGSizeEqualToSize(secondView.intrinsicContentSize, CGSizeZero);
         // Set if both views are visible or if there's a visible view on top that doesn't have padding
         // added relative to the current view yet
-        padding.constant = (firstVisible && (secondVisible || hasVisibleAncestors)) ? MBDefaultPadding : 0.f;
+        padding.constant = (firstVisible && (secondVisible || hasVisibleAncestors)) ? MSMBDefaultPadding : 0.f;
         hasVisibleAncestors |= secondVisible;
     }];
 }
@@ -632,7 +632,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 
 #pragma mark - Properties
 
-- (void)setMode:(MBProgressHUDMode)mode {
+- (void)setMode:(MSMBProgressHUDMode)mode {
     if (mode != _mode) {
         _mode = mode;
         [self updateIndicators];
@@ -642,7 +642,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 - (void)setCustomView:(UIView *)customView {
     if (customView != _customView) {
         _customView = customView;
-        if (self.mode == MBProgressHUDModeCustomView) {
+        if (self.mode == MSMBProgressHUDModeCustomView) {
             [self updateIndicators];
         }
     }
@@ -808,7 +808,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 @end
 
 
-@implementation MBRoundProgressView
+@implementation MSMBRoundProgressView
 
 #pragma mark - Lifecycle
 
@@ -915,7 +915,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 @end
 
 
-@implementation MBBarProgressView
+@implementation MSMBBarProgressView
 
 #pragma mark - Lifecycle
 
@@ -1044,20 +1044,20 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 @end
 
 
-@interface MBBackgroundView ()
+@interface MSMBBackgroundView ()
 
 @property UIVisualEffectView *effectView;
 
 @end
 
 
-@implementation MBBackgroundView
+@implementation MSMBBackgroundView
 
 #pragma mark - Lifecycle
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
-        _style = MBProgressHUDBackgroundStyleBlur;
+        _style = MSMBProgressHUDBackgroundStyleBlur;
         if (@available(iOS 13.0, *)) {
             #if TARGET_OS_TV
             _blurEffectStyle = UIBlurEffectStyleRegular;
@@ -1086,7 +1086,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 
 #pragma mark - Appearance
 
-- (void)setStyle:(MBProgressHUDBackgroundStyle)style {
+- (void)setStyle:(MSMBProgressHUDBackgroundStyle)style {
     if (_style != style) {
         _style = style;
         [self updateForBackgroundStyle];
@@ -1118,8 +1118,8 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
     [self.effectView removeFromSuperview];
     self.effectView = nil;
 
-    MBProgressHUDBackgroundStyle style = self.style;
-    if (style == MBProgressHUDBackgroundStyleBlur) {
+    MSMBProgressHUDBackgroundStyle style = self.style;
+    if (style == MSMBProgressHUDBackgroundStyleBlur) {
         UIBlurEffect *effect =  [UIBlurEffect effectWithStyle:self.blurEffectStyle];
         UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
         [self insertSubview:effectView atIndex:0];
@@ -1134,7 +1134,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 }
 
 - (void)updateViewsForColor:(UIColor *)color {
-    if (self.style == MBProgressHUDBackgroundStyleBlur) {
+    if (self.style == MSMBProgressHUDBackgroundStyleBlur) {
         self.backgroundColor = self.color;
     } else {
         self.backgroundColor = self.color;
@@ -1144,7 +1144,7 @@ static const CGFloat MBDefaultDetailsLabelFontSize = 12.f;
 @end
 
 
-@implementation MBProgressHUDRoundedButton
+@implementation MSMBProgressHUDRoundedButton
 
 #pragma mark - Lifecycle
 

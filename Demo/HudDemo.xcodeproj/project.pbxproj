@@ -9,14 +9,13 @@
 /* Begin PBXBuildFile section */
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		2A263F182522D2C00063A33A /* MSMBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A263F142522D28C0063A33A /* MSMBProgressHUD.m */; };
 		5BE141EE1CD8C33D0023BC9E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BE141ED1CD8C33D0023BC9E /* QuartzCore.framework */; };
-		D22F7D810F85241C00550BB3 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = D22F7D800F85241C00550BB3 /* MBProgressHUD.m */; };
 		D274948B1D3B74AA00ABEB66 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D274948A1D3B74AA00ABEB66 /* Images.xcassets */; };
 		D27F18451D3B5878009D7482 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D27F18441D3B5878009D7482 /* main.m */; };
 		D27F18481D3B5878009D7482 /* MBHudDemoTVAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D27F18471D3B5878009D7482 /* MBHudDemoTVAppDelegate.m */; };
 		D27F184B1D3B5878009D7482 /* MBHudDemoTVViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D27F184A1D3B5878009D7482 /* MBHudDemoTVViewController.m */; };
 		D27F184E1D3B5878009D7482 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D27F184C1D3B5878009D7482 /* Main.storyboard */; };
-		D27F18551D3B5AAF009D7482 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = D22F7D800F85241C00550BB3 /* MBProgressHUD.m */; };
 		D27F185A1D3B5DFF009D7482 /* MBHudDemoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D27F18581D3B5DFF009D7482 /* MBHudDemoAppDelegate.m */; };
 		D27F185B1D3B5DFF009D7482 /* MBHudDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D27F18591D3B5DFF009D7482 /* MBHudDemoViewController.m */; };
 		D27F185E1D3B5E0D009D7482 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D27F185D1D3B5E0D009D7482 /* main.m */; };
@@ -42,9 +41,9 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* HudDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HudDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		2A263F132522D28C0063A33A /* MSMBProgressHUD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MSMBProgressHUD.h; path = ../MSMBProgressHUD.h; sourceTree = "<group>"; };
+		2A263F142522D28C0063A33A /* MSMBProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MSMBProgressHUD.m; path = ../MSMBProgressHUD.m; sourceTree = "<group>"; };
 		5BE141ED1CD8C33D0023BC9E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		D22F7D7F0F85241C00550BB3 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = ../MBProgressHUD.h; sourceTree = SOURCE_ROOT; };
-		D22F7D800F85241C00550BB3 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = ../MBProgressHUD.m; sourceTree = "<group>"; };
 		D274948A1D3B74AA00ABEB66 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		D27F18411D3B5878009D7482 /* HudDemoTV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HudDemoTV.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D27F18441D3B5878009D7482 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -214,8 +213,8 @@
 		D28CBB391A87A6B00052DCEC /* MBProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
-				D22F7D7F0F85241C00550BB3 /* MBProgressHUD.h */,
-				D22F7D800F85241C00550BB3 /* MBProgressHUD.m */,
+				2A263F132522D28C0063A33A /* MSMBProgressHUD.h */,
+				2A263F142522D28C0063A33A /* MSMBProgressHUD.m */,
 			);
 			name = MBProgressHUD;
 			sourceTree = "<group>";
@@ -357,8 +356,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A263F182522D2C00063A33A /* MSMBProgressHUD.m in Sources */,
 				D27F185B1D3B5DFF009D7482 /* MBHudDemoViewController.m in Sources */,
-				D22F7D810F85241C00550BB3 /* MBProgressHUD.m in Sources */,
 				D27F185E1D3B5E0D009D7482 /* main.m in Sources */,
 				D27F185A1D3B5DFF009D7482 /* MBHudDemoAppDelegate.m in Sources */,
 			);
@@ -371,7 +370,6 @@
 				D27F184B1D3B5878009D7482 /* MBHudDemoTVViewController.m in Sources */,
 				D27F18481D3B5878009D7482 /* MBHudDemoTVAppDelegate.m in Sources */,
 				D27F18451D3B5878009D7482 /* main.m in Sources */,
-				D27F18551D3B5AAF009D7482 /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
